@@ -1,11 +1,17 @@
 exports.homePage = (req, res) => {
-    res.render("index", { title: "Home Page" });
+    res.render("template", { title: "Home Page", body: "index" });
 };
 
 exports.signUp = (req, res) => {
-    res.render("sign-up", { title: "Sign Up" });
+    res.render("template", { title: "Sign Up", body: "sign-up" });
 };
 
 exports.signIn = (req, res) => {
-    res.render("sign-in", { title: "Log In" });
+    if (req.method === "GET") {
+        return res.render("template", { title: "Log In", body: "sign-in" });
+    }
+
+    if (req.method === "POST") {
+        // do stuff
+    }
 };

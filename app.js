@@ -14,6 +14,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "static")));
 
 app.use("/", indexRouter);
+app.get("*", (req, res, next) => {
+    res.status(404).render("404", { title: "Error 404" })
+})
 
 app.listen(process.env.SERVER_PORT, (req, res) => {
     console.log("Server listening on PORT: " + process.env.SERVER_PORT);
