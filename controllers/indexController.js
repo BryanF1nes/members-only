@@ -1,4 +1,5 @@
 const passport = require("passport");
+const bcrypt = require("bcryptjs");
 const pool = require("../db/pool.js");
 
 exports.homePage = (req, res) => {
@@ -13,11 +14,13 @@ exports.signUp = async (req, res, next) => {
     if (req.method === "POST") {
         try {
             if (req.body.password === req.body.confirm_password) {
+                const hashedPassword = await bcrypt.hash(req.body.password, 10);
+                
                 await pool.query("INSERT INTO users (first_name, last_name, username, password, membership_status) VALUES ($1, $2, $3, $4, TRUE)", [
                     req.body.first_name,
                     req.body.last_name,
                     req.body.username,
-                    req.body.password
+                    hashedPassword
                 ]);
                 res.redirect("/sign-in");
             }
