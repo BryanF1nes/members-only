@@ -2,36 +2,63 @@ const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const pool = require("../db/pool.js");
 const db = require("../db/queries.js");
+const { body, validationResult } = require("express-validator");
+
+const alphaErr = "must only contain letters.";
+const lengthErr = "must be between 1 and 20 characters.";
+const usernameLengthErr = "must be between 10 and 20 characters."
+
+const validateUser = [
+    body('first_name').trim()
+        .isAlpha().withMessage(`First name ${alphaErr}`)
+        .isLength({ min: 1, max: 20 }).withMessage(`First name ${lengthErr}`),
+    body('last_name').trim()
+        .isAlpha().withMessage(`Last name ${alphaErr}`)
+        .isLength({ min: 1, max: 20 }).withMessage(`Last name ${lengthErr}`),
+    body('username').trim()
+        .isLength({ min: 10, max: 20 }).withMessage(`Username ${usernameLengthErr}`),
+    body('password').trim()
+        .isLength({ min: 10 }).withMessage('Password must contain at least 10 characters.'),
+    body('confirm_password').trim()
+        // must match password
+]
 
 exports.homePage = async (req, res) => {
     const messages = await db.getMessages();
     res.render("template", { title: "Message Center", body: "index", user: req.user, messages: messages });
 };
 
-exports.signUp = async (req, res, next) => {
-    if (req.method === "GET") {
-        return res.render("template", { title: "Sign Up", body: "sign-up" });
-    }
+exports.signUp = [
+    validateUser,
+    async (req, res, next) => {
+        if (req.method === "GET") {
+            return res.render("template", { title: "Sign Up", body: "sign-up" });
+        }
 
-    if (req.method === "POST") {
-        try {
-            if (req.body.password === req.body.confirm_password) {
-                const hashedPassword = await bcrypt.hash(req.body.password, 10);
-                
-                await pool.query("INSERT INTO users (first_name, last_name, username, password, membership_status) VALUES ($1, $2, $3, $4, FALSE)", [
-                    req.body.first_name,
-                    req.body.last_name,
-                    req.body.username,
-                    hashedPassword
-                ]);
-                res.redirect("/sign-in");
+        if (req.method === "POST") {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).render("template", { title: "Sign Up", body: "sign-up", errors: errors.array() });
             }
-            return res.status(400).send("Passwords do not match.")
-        } catch (error) {
-            return next(error);
+            try {
+                if (req.body.password === req.body.confirm_password) {
+                    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+                    
+                    await pool.query("INSERT INTO users (first_name, last_name, username, password, membership_status) VALUES ($1, $2, $3, $4, FALSE)", [
+                        req.body.first_name,
+                        req.body.last_name,
+                        req.body.username,
+                        hashedPassword
+                    ]);
+                    res.redirect("/sign-in");
+                }
+                return res.status(400).send("Passwords do not match.")
+            } catch (error) {
+                return next(error);
+            }
         }
     }
-};
+];
 
 exports.signIn = (req, res) => {
     if (req.method === "GET") {
