@@ -3,7 +3,7 @@
         <div class="flex lg:flex-1">
         <a href="/" class="-m-1.5 p-1.5">
             <span class="sr-only">Members Only</span>
-            <img class="h-8 w-auto" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="">
+            <h1 class="text-4xl font-semibold text-white">MC <span class="text-sm font-thin max-sm:hidden">Send Messages & Connect</span></h1>
         </a>
         </div>
         <div class="flex lg:hidden">
@@ -16,9 +16,17 @@
         </div>
         <div class="hidden lg:flex lg:gap-x-12">
         </div>
-        <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <a href="/sign-in" class="text-md/6 font-semibold text-white">Log in</a>
-        </div>
+        <% if (locals.user) { %>
+            <div class="hidden lg:flex lg:flex-1 lg:justify-end gap-1">
+                <p class="text-md/6 font-semibold text-white"><span class="text-md/6 font-thin">Hi,</span> <%= user.username %></p>
+                <div class="text-white">|</div>
+                <a href="/log-out" class="text-sm/6 font-normal text-white">Log out</a>
+            </div>
+        <% } else { %>
+            <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+                <a href="/sign-in" class="text-md/6 font-semibold text-white">Log in</a>
+            </div>
+        <% } %>
     </nav>
 
     <!-- Mobile menu, show/hide based on menu open state. -->
@@ -29,7 +37,7 @@
         <div class="flex items-center justify-between">
             <a href="/" class="-m-1.5 p-1.5">
             <span class="sr-only">Members Only</span>
-            <img class="h-8 w-auto" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500" alt="">
+                <h1 class="text-4xl font-semibold text-white">MC <span class="text-sm font-thin max-sm:hidden">Send Messages & Connect</span></h1>
             </a>
             <button id="close-menu" type="button" class="-m-2.5 rounded-md p-2.5 text-gray-400">
             <span class="sr-only">Close menu</span>
@@ -38,15 +46,25 @@
             </svg>
             </button>
         </div>
-        <div class="mt-6 flow-root">
-            <div class="-my-6 divide-y divide-gray-500/25">
-            <div class="space-y-2 py-6">
+            <div class="mt-6 flow-root">
+                <% if (locals.user) { %>
+                <div class="-my-6 divide-y divide-gray-500/25">
+                    <div class="space-y-2 py-6">
+                        <p class="text-md/6 font-normal text-white">Welcome, <span class="text-md/6 font-semibold text-white"><%= user.username %></span></p>
+                    </div>
+                    <div class="py-6">
+                        <a href="/log-out" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-gray-800">Log out</a>
+                    </div>
+                </div>
+                <% } else { %>
+                <div class="-my-6 divide-y divide-gray-500/25">
+                    <div class="space-y-2 py-6"></div>
+                    <div class="py-6">
+                        <a href="/sign-in" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-gray-800">Log in</a>
+                    </div>
+                </div>
+                <% } %>
             </div>
-            <div class="py-6">
-                <a href="/sign-in" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-gray-800">Log in</a>
-            </div>
-            </div>
-        </div>
         </div>
     </div>
 </header>

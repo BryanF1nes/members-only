@@ -2,5 +2,18 @@
     <!-- Content goes here -->
     <h1 class="text-3xl mx-auto my-10">Message Center</h1>
     <div class="h-[1px] bg-gray-700 w-full mb-4"></div>
-    <%- include('messages/message') %>
+    <% if (locals.user) { %>
+        <%- include('messages/messageForm') %>
+        <%- include('messages/message') %>
+    <% } else { %>
+        <div>
+            <h1 class="mt-10 text-3xl font-semibold">Welcome to <i class="font-thin">Message Center!</i></h1>
+            <br>
+            <p class="text-md">Please <a class="text-indigo-600 hover:text-indigo-500 font-semibold" href="/sign-up">Sign up</a> or <a href="/sign-in" class="font-semibold text-indigo-600 hover:text-indigo-500">Sign In</a> to not only see messages but post messages yourself!</p>
+            <br>
+            <p class="text-md">Thank you so much for checking out this application! This site was built using Express, EJS, Tailwind, Passport, Bcrypt, SQL, and Express-Validation.</p>
+            <br>
+            <p class="text-md">Sincerely, Bryan!</p>
+        </div>
+    <% } %>
 </div>
