@@ -12,6 +12,7 @@ const app = express();
 
 // Routes
 const indexRouter = require("./routes/indexRouter.js");
+const memberRouter = require("./routes/memberRouter.js");
 
 // Server Setup
 app.set("view engine", "ejs");
@@ -56,6 +57,7 @@ passport.deserializeUser(async (id, done) => {
 })
 
 app.use("/", indexRouter);
+app.use("/members", memberRouter);
 app.get("*", (req, res, next) => {
     res.status(404).render("404", { title: "Error 404" })
 })

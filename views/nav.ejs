@@ -53,7 +53,7 @@
                         <p class="text-md/6 font-normal text-white">Welcome, <span class="text-md/6 font-semibold text-white"><%= user.username %></span></p>
                     </div>
                     <div class="py-6">
-                        <a href="/messages/:id" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-gray-800">Your Messages</a>
+                        <a href="/members/messages/<%= locals.user.id %>" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-gray-800">Your Messages</a>
                         <a href="/members" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-gray-800">Members</a>
                         <a href="/secrets" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-gray-800">Secrets</a>
                         <a href="/log-out" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-gray-800">Log out</a>
@@ -71,4 +71,4 @@
         </div>
     </div>
 </header>
-<script src="../js/nav.js"></script>
+<script src="/js/nav.js"></script>

@@ -3,7 +3,7 @@
     <% const date = message.timestamp.toDateString() %>
     <% const formattedTime = message.timestamp.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true }); %>
     <% const formattedTimeStamp = date + ' @ ' + formattedTime %> 
-    <div class="flex my-4 py-4">
+    <div class="flex my-4 py-4" id="<%= message.id %>">
         <div class="mr-4 shrink-0 self-center">
             <span class="inline-flex size-14 items-center justify-center rounded-full bg-gray-500">
                 <span class="text-xl font-medium text-white"><%= initial %></span>

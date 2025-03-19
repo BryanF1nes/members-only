@@ -20,4 +20,23 @@ exports.getMessages = async () => {
     } catch (error) {
         console.error("Unable to grab messages.");
     }
+};
+
+exports.getMembers = async () => {
+    try {
+        const { rows } = await pool.query("SELECT * FROM users;");
+
+        return rows;
+    } catch (error) {
+        console.error("Unable to get members");
+    }
+}
+
+exports.getMessagesById = async (id) => {
+    try {
+        const { rows } = await pool.query("SELECT * FROM messages WHERE user_id=$1", [id]);
+        return rows;
+    } catch (error) {
+        console.error("Unable to grab messages");
+    }
 }
