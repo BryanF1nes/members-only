@@ -1,18 +1,24 @@
-<% messages.map((message) => { %>
-    <% const initial = message.first_name[0] + '' + message.last_name[0] %>
-    <% const date = message.timestamp.toDateString() %>
-    <% const formattedTime = message.timestamp.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true }); %>
-    <% const formattedTimeStamp = date + ' @ ' + formattedTime %> 
-    <div class="flex my-4 py-4" id="<%= message.id %>">
-        <div class="mr-4 shrink-0 self-center">
-            <span class="inline-flex size-14 items-center justify-center rounded-full bg-gray-500">
-                <span class="text-xl font-medium text-white"><%= initial %></span>
-            </span>
-        </div>
-        <div class="w-full">
-            <h4 class="text-lg font-bold"><%= message.title %></h4>
-            <p class="mt-1"><%= message.body %></p>
-            <p class="mt-1 text-right text-sm text-gray-900"><%= formattedTimeStamp %></p>
-        </div>
+<% if (messages.length === 0) { %>
+    <div>
+        <h3 class="text-lg text-gray-900">Be the first to send a message!</h3>
     </div>
-<% }) %>
+<% } else { %>
+    <% messages.map((message) => { %>
+        <% const initial = message.first_name[0] + '' + message.last_name[0] %>
+        <% const date = message.timestamp.toDateString() %>
+        <% const formattedTime = message.timestamp.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true }); %>
+        <% const formattedTimeStamp = date + ' @ ' + formattedTime %> 
+        <div class="flex my-4 py-4" id="<%= message.id %>">
+            <div class="mr-4 shrink-0 self-center">
+                <span class="inline-flex size-14 items-center justify-center rounded-full bg-gray-500">
+                    <span class="text-xl font-medium text-white"><%= initial %></span>
+                </span>
+            </div>
+            <div class="w-full">
+                <h4 class="text-lg font-bold"><%= message.title %></h4>
+                <p class="mt-1"><%= message.body %></p>
+                <p class="mt-1 text-right text-sm text-gray-900"><%= formattedTimeStamp %></p>
+            </div>
+        </div>
+    <% }) %>
+<% } %>
