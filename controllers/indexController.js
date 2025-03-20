@@ -3,6 +3,19 @@ const bcrypt = require("bcryptjs");
 const pool = require("../db/pool.js");
 const db = require("../db/queries.js");
 const { body, validationResult } = require("express-validator");
+const { rateLimit } = require("express-rate-limit");
+
+const limiter = rateLimit({
+	windowMs: 30 * 1000, // 30 seconds
+	limit: 1, // Limit each IP to 1 requests per `window` (here, per 30 seconds)
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+    message: "You can only send a message every 30 seconds",
+    handler: async (req, res, next, options) => {
+        const messages = await db.getMessages();
+        return res.status(429).render("template", { title: "Message Center", body: "index", user: req.user, messages: messages, errors: [{ msg: "You can only send a message every 30 seconds" }] });
+    }
+})
 
 const alphaErr = "must only contain letters.";
 const lengthErr = "must be between 1 and 20 characters.";
@@ -33,9 +46,25 @@ const validateUser = [
         }).withMessage('Passwords must match.'),
 ]
 
+const validateMessage = [
+    body('title').trim()
+        .notEmpty().withMessage('Title cannot be empty.')
+        .isLength({ min: 2, }).withMessage('Title must contain at least 2 characters.'),
+    body('comment').trim()
+        .notEmpty().withMessage('Message body cannot be empty.')
+        .isLength({ min: 10 }).withMessage(`Message body must contain at least 10 characters.`),
+]
+
+
 exports.homePage = async (req, res) => {
     const messages = await db.getMessages();
-    res.render("template", { title: "Message Center", body: "index", user: req.user, messages: messages });
+    let verificationMessage = "";
+
+    if (req.user && !req.user.membership_status) {
+        verificationMessage = "You need to verify your account before posting messages.";
+    }
+
+    res.render("template", { title: "Message Center", body: "index", user: req.user, verification: verificationMessage, messages: messages });
 };
 
 exports.signUp = [
@@ -48,7 +77,7 @@ exports.signUp = [
         if (req.method === "POST") {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                return res.status(400).render("template", { title: "Sign Up", body: "sign-up", errors: errors.array() });
+                return res.status(400).render("template", { title: "Sign Up", body: "sign-up", user: req.user, errors: errors.array() });
             }
             try {
                 const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -80,9 +109,23 @@ exports.logOut = (req, res, next) => {
     });
 };
 
-exports.postMessage = async (req, res, next) => {
+exports.postMessage = [
+    limiter,
+    validateMessage,
+    async (req, res, next) => {
     try {
         if (req.user && req.user.membership_status) {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                const messages = await db.getMessages();
+                return res.status(400).render("template", {
+                    title: "Message Center",
+                    body: "index",
+                    user: req.user,
+                    messages: messages,
+                    errors: errors.array()
+                });
+            }
             const date = new Date();
             const user_id = req.user.id;
 
@@ -99,7 +142,8 @@ exports.postMessage = async (req, res, next) => {
     } catch (error) {
         return next(error);
     }
-};
+}
+];
 
 exports.secrets = (req, res) => {
     res.render("template", { title: "Secret Center", body: "secrets", user: req.user });
