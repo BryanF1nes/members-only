@@ -6,7 +6,7 @@ const { body, validationResult } = require("express-validator");
 
 const alphaErr = "must only contain letters.";
 const lengthErr = "must be between 1 and 20 characters.";
-const usernameLengthErr = "must be between 10 and 20 characters."
+const usernameLengthErr = "must be atleast 5 characters long."
 
 const validateUser = [
     body('first_name').trim()
@@ -16,11 +16,19 @@ const validateUser = [
         .isAlpha().withMessage(`Last name ${alphaErr}`)
         .isLength({ min: 1, max: 20 }).withMessage(`Last name ${lengthErr}`),
     body('username').trim()
-        .isLength({ min: 10, max: 20 }).withMessage(`Username ${usernameLengthErr}`),
+        .isLength({ min: 5 }).withMessage(`Username ${usernameLengthErr}`)
+        .custom(async value => {
+            const username = await db.findUsername(value);
+            if (username) {
+                throw new Error('Username is already in-use');
+            }
+        }).withMessage('Username is already in-use.'),
     body('password').trim()
         .isLength({ min: 10 }).withMessage('Password must contain at least 10 characters.'),
     body('confirm_password').trim()
-        // must match password
+        .custom((value, { req }) => {
+            return value === req.body.password
+        }).withMessage('Passwords must match.'),
 ]
 
 exports.homePage = async (req, res) => {
@@ -41,18 +49,15 @@ exports.signUp = [
                 return res.status(400).render("template", { title: "Sign Up", body: "sign-up", errors: errors.array() });
             }
             try {
-                if (req.body.password === req.body.confirm_password) {
-                    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-                    
-                    await pool.query("INSERT INTO users (first_name, last_name, username, password, membership_status) VALUES ($1, $2, $3, $4, FALSE)", [
-                        req.body.first_name,
-                        req.body.last_name,
-                        req.body.username,
-                        hashedPassword
-                    ]);
-                    res.redirect("/sign-in");
-                }
-                return res.status(400).send("Passwords do not match.")
+                const hashedPassword = await bcrypt.hash(req.body.password, 10);
+                
+                await pool.query("INSERT INTO users (first_name, last_name, username, password, membership_status) VALUES ($1, $2, $3, $4, FALSE)", [
+                    req.body.first_name,
+                    req.body.last_name,
+                    req.body.username,
+                    hashedPassword
+                ]);
+                return res.redirect("/sign-in");
             } catch (error) {
                 return next(error);
             }
