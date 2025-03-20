@@ -9,14 +9,14 @@
         <% const formattedTime = message.timestamp.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true }); %>
         <% const formattedTimeStamp = date + ' @ ' + formattedTime %> 
         <div class="flex my-4 py-4" id="<%= message.id %>">
-            <div class="mr-4 shrink-0 self-center">
+            <div class="mr-4 shrink-0 self-start">
                 <span class="inline-flex size-14 items-center justify-center rounded-full bg-gray-500">
                     <span class="text-xl font-medium text-white"><%= initial %></span>
                 </span>
             </div>
             <div class="w-full">
                 <h4 class="text-lg font-bold"><%= message.title %></h4>
-                <p class="mt-1"><%= message.body %></p>
+                <pre class="mt-1 leading-tight text-md text-gray-900 whitespace-pre-wrap"><%= message.body %></pre>
                 <p class="mt-1 text-right text-sm text-gray-900"><%= formattedTimeStamp %></p>
             </div>
         </div>
