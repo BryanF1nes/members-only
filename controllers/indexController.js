@@ -24,7 +24,9 @@ const validateUser = [
             }
         }).withMessage('Username is already in-use.'),
     body('password').trim()
-        .isLength({ min: 10 }).withMessage('Password must contain at least 10 characters.'),
+        .isLength({ min: 10 }).withMessage('Password must contain at least 10 characters.')
+        .matches(/\d/).withMessage('Password must contain at least one number.')
+        .matches(/[!@#$%^&*?{}|<>]/).withMessage('Password must contain at least one special character. [!@#$%^&*?{}|<>]'),
     body('confirm_password').trim()
         .custom((value, { req }) => {
             return value === req.body.password
