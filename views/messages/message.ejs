@@ -6,8 +6,6 @@
     <% messages.map((message) => { %>
         <% const initial = message.first_name[0].toUpperCase() + '' + message.last_name[0].toUpperCase() %>
         <% const date = new Date(message.timestamp + 'UTC'); %>
-        <% const localOffset = date.getTimezoneOffset(); %>
-        <% date.setMinutes(date.getMinutes() - localOffset); %>
         <% const formattedTime = date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true }); %>
         <% const formattedTimeStamp = date.toLocaleString("en-US", { year: "numeric", month: "long", day: "numeric" }) + ' @ ' + formattedTime %> 
         <div class="flex my-4 py-4" id="<%= message.id %>">
