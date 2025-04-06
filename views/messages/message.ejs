@@ -3,38 +3,9 @@
         <h3 class="text-lg text-gray-900">Be the first to send a message!</h3>
     </div>
 <% } else { %>
-    <% messages.map((message) => { %>
-        <% const initial = message.first_name[0].toUpperCase() + '' + message.last_name[0].toUpperCase() %>
-        <% 
-            const date = new Date(message.timestamp);
-
-            // Get the timezone offset in milliseconds
-            const serverOffset = date.getTimezoneOffset() * 60000; 
-            const localDate = new Date(date.getTime() - serverOffset);
-
-            // Format date to "March 20, 2025 @ 8:51 PM"
-            const formattedTimeStamp = localDate.toLocaleString("en-US", { 
-                year: "numeric", 
-                month: "long", 
-                day: "numeric"
-            }) + ' @ ' + localDate.toLocaleTimeString("en-US", { 
-                hour: "numeric", 
-                minute: "2-digit", 
-                hour12: true
-            });
-        %>
-
-        <div class="flex my-4 py-4" id="<%= message.id %>">
-            <div class="mr-4 shrink-0 self-start">
-                <span class="inline-flex size-14 items-center justify-center rounded-full bg-gray-500">
-                    <span class="text-xl font-medium text-white"><%= initial %></span>
-                </span>
-            </div>
-            <div class="w-full">
-                <h4 class="text-lg font-bold"><%= message.title %></h4>
-                <pre class="mt-1 leading-tight text-md text-gray-900 whitespace-pre-wrap"><%= message.body %></pre>
-                <p class="mt-1 text-right text-sm text-gray-900"><%= formattedTimeStamp %></p>
-            </div>
-        </div>
-    <% }) %>
+    <div id="messageDiv"></div>
+    <script>
+        let messages = <%- JSON.stringify(messages) %>;
+    </script>
+    <script src="/js/message.js"></script>
 <% } %>
