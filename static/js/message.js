@@ -1,7 +1,7 @@
 const messagesDiv = document.querySelector('#messageDiv');
 
-function createMessage(messages, parent) {
-    messages.forEach(message => {
+function createMessage(msg, parent) {
+    msg.forEach(message => {
         const div = document.createElement("div");
         div.classList.add("flex", "my-4", "py-4")
         div.id = message.id;
