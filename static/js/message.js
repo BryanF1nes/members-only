@@ -35,4 +35,4 @@ function createMessage(msg, parent) {
     })
 }
 
-createMessage(messages, messagesDiv);
+createMessage(window.messages, messagesDiv);
