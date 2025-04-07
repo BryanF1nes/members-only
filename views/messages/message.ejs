@@ -4,8 +4,5 @@
     </div>
 <% } else { %>
     <div id="messageDiv"></div>
-    <script>
-        window.messages = <%- JSON.stringify(messages) %>;
-    </script>
-    <script src="/js/message.js"></script>
+    <script src="/js/message.js" defer></script>
 <% } %>

@@ -1,5 +1,26 @@
 const messagesDiv = document.querySelector('#messageDiv');
 
+async function getMessages() {
+    const url = 'https://members-only-fq74.onrender.com/messages';
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        };
+
+        const data = await response.json();
+
+        createMessage(data, messagesDiv);
+
+    } catch (error) {
+        
+    }
+}
+
+getMessages();
+
+
+
 function createMessage(msg, parent) {
     msg.forEach(message => {
         const div = document.createElement("div");
@@ -34,5 +55,3 @@ function createMessage(msg, parent) {
         parent.append(div);
     })
 }
-
-createMessage(window.messages, messagesDiv);

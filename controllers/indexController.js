@@ -163,3 +163,13 @@ exports.postSecret = async (req, res, next) => {
         return next(error)
     }
 }
+
+exports.getMessages = async (req, res, next) => {
+    try {
+        const messages = await db.getMessages();
+
+        return res.send(messages);
+    } catch (error) {
+        return next(error)
+    }
+}
