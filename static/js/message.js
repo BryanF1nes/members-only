@@ -1,7 +1,8 @@
 const messagesDiv = document.querySelector('#messageDiv');
 
 async function getMessages() {
-    const url = 'https://members-only-fq74.onrender.com/messages';
+    const url = 'http://localhost:3000/messages';
+    // const url = 'https://members-only-fq74.onrender.com/messages';
     try {
         const response = await fetch(url);
         if (!response.ok) {

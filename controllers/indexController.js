@@ -31,19 +31,40 @@ const validateUser = [
     body('username').trim()
         .isLength({ min: 5 }).withMessage(`Username ${usernameLengthErr}`)
         .custom(async value => {
-            const username = await db.findUsername(value);
+            const username = await db.findUser(value);
             if (username) {
                 throw new Error('Username is already in-use');
             }
         }).withMessage('Username is already in-use.'),
     body('password').trim()
         .isLength({ min: 10 }).withMessage('Password must contain at least 10 characters.')
-        .matches(/\d/).withMessage('Password must contain at least one number.')
-        .matches(/[!@#$%^&*?{}|<>]/).withMessage('Password must contain at least one special character. [!@#$%^&*?{}|<>]'),
+        .matches(/\d/).withMessage('Password must contain at least one number.'),
     body('confirm_password').trim()
         .custom((value, { req }) => {
             return value === req.body.password
         }).withMessage('Passwords must match.'),
+]
+
+const validateSignIn = [
+    body('username').trim()
+        .custom(async value => {
+            const username = await db.findUser(value);
+            if (!username) {
+                throw new Error('Username is already in-use');
+            }
+        }).withMessage('Username was not found.'),
+    body('password').trim()
+        .custom(async (value, { req }) => {
+            const user = await db.findUser(req.body.username);
+            if (!user) {
+                throw new Error('Invalid username or password'); // Defensive fallback
+            }
+
+            const isMatch = await bcrypt.compare(value, user.password);
+            if (!isMatch) {
+                throw new Error('That password is not correct.');
+            }
+        }).withMessage('That password is not correct.')
 ]
 
 const validateMessage = [
@@ -77,7 +98,13 @@ exports.signUp = [
         if (req.method === "POST") {
             const errors = validationResult(req);
             if (!errors.isEmpty()) {
-                return res.status(400).render("template", { title: "Sign Up", body: "sign-up", user: req.user, errors: errors.array() });
+                return res.status(400).render("template", { 
+                    title: "Sign Up",
+                    body: "sign-up",
+                    user: req.user,
+                    fields: req.body,
+                    errors: errors.array()
+                });
             }
             try {
                 const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -96,11 +123,32 @@ exports.signUp = [
     }
 ];
 
-exports.signIn = (req, res) => {
-    if (req.method === "GET") {
-        return res.render("template", { title: "Log In", body: "sign-in" });
+exports.signIn = [
+    validateSignIn,
+    (req, res, next) => {
+        if (req.method === "GET") {
+            return res.render("template", { title: "Log In", body: "sign-in" });
+        }
+
+        if (req.method === "POST") {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).render("template", {
+                    title: "Log In",
+                    body: "sign-in",
+                    user: req.user,
+                    values: req.body,
+                    errors: errors.array()
+                });
+            }
+
+            return passport.authenticate("local", {
+                successRedirect: "/",
+                failureRedirect: "/sign-in",
+            })(req, res, next);
+        }
     }
-};
+];
 
 exports.logOut = (req, res, next) => {
     req.logout((error) => {

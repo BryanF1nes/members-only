@@ -11,13 +11,13 @@
                 <div>
                     <label for="first_name" class="block text-sm/6 font-medium text-gray-900">First Name <span class="text-red-500">*</span></label>
                     <div class="mt-2">
-                        <input type="text" name="first_name" id="first_name" placeholder="First name" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <input type="text" name="first_name" id="first_name" placeholder="First name" value="<%= typeof fields !== 'undefined' ? fields.first_name : '' %>" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                     </div>
                 </div>
                 <div>
                     <label for="last_name" class="block text-sm/6 font-medium text-gray-900">Last Name <span class="text-red-500">*</span></label>
                     <div class="mt-2">
-                        <input type="text" name="last_name" id="last_name" placeholder="Last name" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <input type="text" name="last_name" id="last_name" placeholder="Last name" value="<%= typeof fields !== 'undefined' ? fields.last_name : '' %>" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
             <div>
                 <label for="username" class="block text-sm/6 font-medium text-gray-900">Username <span class="text-red-500">*</span></label>
                 <div class="mt-2">
-                    <input type="text" name="username" id="username" placeholder="Username" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                    <input type="text" name="username" id="username" placeholder="Username" value="<%= typeof fields !== 'undefined' ? fields.username : '' %>" required class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                 </div>
             </div>
 

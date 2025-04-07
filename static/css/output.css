@@ -23,6 +23,9 @@
     --spacing: 0.25rem;
     --container-sm: 24rem;
     --container-3xl: 48rem;
+    --container-4xl: 56rem;
+    --container-5xl: 64rem;
+    --container-6xl: 72rem;
     --container-7xl: 80rem;
     --text-sm: 0.875rem;
     --text-sm--line-height: calc(1.25 / 0.875);
@@ -272,35 +275,8 @@
   .-m-2\.5 {
     margin: calc(var(--spacing) * -2.5);
   }
-  .m-40 {
-    margin: calc(var(--spacing) * 40);
-  }
-  .m-auto {
-    margin: auto;
-  }
   .-mx-3 {
     margin-inline: calc(var(--spacing) * -3);
-  }
-  .mx-24 {
-    margin-inline: calc(var(--spacing) * 24);
-  }
-  .mx-40 {
-    margin-inline: calc(var(--spacing) * 40);
-  }
-  .mx-50 {
-    margin-inline: calc(var(--spacing) * 50);
-  }
-  .mx-60 {
-    margin-inline: calc(var(--spacing) * 60);
-  }
-  .mx-70 {
-    margin-inline: calc(var(--spacing) * 70);
-  }
-  .mx-72 {
-    margin-inline: calc(var(--spacing) * 72);
-  }
-  .mx-80 {
-    margin-inline: calc(var(--spacing) * 80);
   }
   .mx-auto {
     margin-inline: auto;
@@ -403,6 +379,15 @@
   }
   .max-w-3xl {
     max-width: var(--container-3xl);
+  }
+  .max-w-4xl {
+    max-width: var(--container-4xl);
+  }
+  .max-w-5xl {
+    max-width: var(--container-5xl);
+  }
+  .max-w-6xl {
+    max-width: var(--container-6xl);
   }
   .max-w-7xl {
     max-width: var(--container-7xl);
@@ -607,6 +592,12 @@
   }
   .py-24 {
     padding-block: calc(var(--spacing) * 24);
+  }
+  .pb-6 {
+    padding-bottom: calc(var(--spacing) * 6);
+  }
+  .pb-10 {
+    padding-bottom: calc(var(--spacing) * 10);
   }
   .pl-5 {
     padding-left: calc(var(--spacing) * 5);
@@ -863,6 +854,11 @@
   .sm\:px-6 {
     @media (width >= 40rem) {
       padding-inline: calc(var(--spacing) * 6);
+    }
+  }
+  .sm\:py-4 {
+    @media (width >= 40rem) {
+      padding-block: calc(var(--spacing) * 4);
     }
   }
   .sm\:py-10 {

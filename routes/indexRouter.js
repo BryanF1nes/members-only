@@ -11,7 +11,8 @@ indexRouter.get("/secrets", indexController.secrets);
 indexRouter.get("/messages", indexController.getMessages);
 
 indexRouter.post("/sign-up", indexController.signUp);
-indexRouter.post("/sign-in", passport.authenticate("local", { successRedirect: "/", failureRedirect: "/sign-in"}));
+// indexRouter.post("/sign-in", passport.authenticate("local", { successRedirect: "/", failureRedirect: "/sign-in"}));
+indexRouter.post("/sign-in", indexController.signIn);
 indexRouter.post("/post-message", indexController.postMessage);
 indexRouter.post("/secrets", indexController.postSecret);
 
