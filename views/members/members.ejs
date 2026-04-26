@@ -2,7 +2,7 @@
     <h1 class="text-3xl mx-auto my-6">Members List</h1>
     <div class="h-[1px] bg-gray-700 w-full mb-4"></div>
     <% members.map((member) => { %>
-        <% const initial = member.first_name[0] + '' + member.last_name[0] %>
+        <% const initial = member.first_name[0].toUpperCase() + '' + member.last_name[0].toUpperCase() %>
         <div class="flex my-4 py-4">
             <div class="mr-4 shrink-0 self-center">
                 <span class="inline-flex size-14 items-center justify-center rounded-full bg-gray-500">
